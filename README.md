@@ -47,15 +47,12 @@ Now,
 open up you local host and port
 ```
 
+### Deployed link in AWS Cloud:
 
-```bash
-Author: Krish Naik
-Data Scientist
-Email: krishnaik06@gmail.com
-
-```
+    http://3.84.227.127:8080/docs
 
 
+### ======================================================================
 
 # AWS-CICD-Deployment-with-Github-Actions
 
@@ -129,3 +126,5 @@ Email: krishnaik06@gmail.com
     AWS_ECR_LOGIN_URI = demo>>  566373416292.dkr.ecr.ap-south-1.amazonaws.com
 
     ECR_REPOSITORY_NAME = text-s
+
+
