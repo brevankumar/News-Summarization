@@ -6,6 +6,101 @@ import torch
 import os
 from textSummarizer.entity import ModelTrainerConfig
 
+import sagemaker.huggingface
+from sagemaker.huggingface import HuggingFace
+import sagemaker
+import boto3
+from datasets.filesystems import S3FileSystem
+
+
+
+class ModelTrainer:
+    def __init__(self, config: ModelTrainerConfig):
+        self.config = config
+
+
+"""
+    def train(self):
+        
+    
+        sm_boto3 = boto3.client("sagemaker") 
+
+        sess= sagemaker.Session()
+
+        region = sess.boto_session.region_name 
+
+        bucket = 'summarization.nlp' 
+
+        role = sagemaker.get_execution_role()
+
+        s3_prefix = 'transformed_data'
+
+        s3 = S3FileSystem()  
+        
+        pytorch_version = '1.7'
+
+        python_version  ='py36'
+                
+        # for Data Parallel training 
+        distribution = {"smdistributed": { "dataparallel": { "enabled": True } } }
+        
+
+        git_config = {'repo': 'https://github.com/huggingface/transformers.git','branch': 'v4.26.0'}
+
+
+        # hyperparameters, which are passed into the training job
+        hyperparameters={'epochs': 1,                          # number of training epochs
+                        'train_batch_size': 32,               # batch size for training
+                        'eval_batch_size': 64,                # batch size for evaluation
+                        'learning_rate': 3e-5,                # learning rate used during training
+                        'model_id':'google/pegasus-cnn_dailymail', # pre-trained model
+                        'fp16': True,                         # Whether to use 16-bit (mixed) precision training
+                        }
+
+        # configuration for running training on smdistributed Data Parallel
+        #distribution = {'smdistributed':{'dataparallel':{ 'enabled': True }}}
+
+
+        # create the Estimator
+        huggingface_estimator = HuggingFace(
+            entry_point='run_summarization.py',
+            source_dir='./examples/pytorch/summarization',
+            git_config=git_config,
+            instance_type='ml.p3.16xlarge',
+            instance_count=1,
+            transformers_version='4.6',
+            pytorch_version=pytorch_version,
+            py_version=python_version,
+            role=role,
+            hyperparameters=hyperparameters,
+            #distribution=distribution,
+        )
+
+        
+        # save train_dataset to s3
+        training_input_path = f's3://{bucket}/{s3_prefix}/train'
+
+        # save test_dataset to s3
+        test_input_path = f's3://{bucket}/{s3_prefix}/test'
+
+        # define a data input dictonary with our uploaded s3 uris
+        data = {
+            'train': training_input_path,
+            'test': test_input_path
+        }
+
+        # starting the train job with our uploaded datasets as input
+        huggingface_estimator.fit(data, wait=True)
+
+
+
+        ## Save model
+        # huggingface_estimator.save_pretrained(os.path.join(self.config.root_dir,"pegasus-newsroom-model"))
+
+        ## Save tokenizer
+        #tokenizer.save_pretrained(os.path.join(self.config.root_dir,"tokenizer"))
+
+"""
 
 
 class ModelTrainer:

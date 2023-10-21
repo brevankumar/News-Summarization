@@ -21,7 +21,7 @@ class ModelEvaluation:
 
     
     def calculate_metric_on_test_ds(self,dataset, metric, model, tokenizer, 
-                               batch_size=16, device="cuda" if torch.cuda.is_available() else "cpu", 
+                               batch_size=1, device="cuda" if torch.cuda.is_available() else "cpu", 
                                column_text="article", 
                                column_summary="highlights"):
         article_batches = list(self.generate_batch_sized_chunks(dataset[column_text], batch_size))
@@ -68,13 +68,13 @@ class ModelEvaluation:
         rouge_metric = load_metric('rouge')
 
         score = self.calculate_metric_on_test_ds(
-        dataset_samsum_pt['test'][0:10], rouge_metric, model_pegasus, tokenizer, batch_size = 2, column_text = 'dialogue', column_summary= 'summary'
+        dataset_samsum_pt['test'][0:10], rouge_metric, model_pegasus, tokenizer, batch_size = 1, column_text = 'text', column_summary= 'summary'
             )
 
         rouge_dict = dict((rn, score[rn].mid.fmeasure ) for rn in rouge_names )
 
-        df = pd.DataFrame(rouge_dict, index = ['pegasus'] )
-        df.to_csv(self.config.metric_file_name, index=False)
+       # df = pd.DataFrame(rouge_dict, index = ['pegasus'] )
+       # df.to_csv(self.config.metric_file_name, index=False)
 
         
 

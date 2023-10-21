@@ -5,6 +5,9 @@ from textSummarizer.logging import logger
 from textSummarizer.utils.common import get_size
 from textSummarizer.entity import DataIngestionConfig
 from pathlib import Path
+import boto3
+import os
+
 
 
 
@@ -15,14 +18,32 @@ class DataIngestion:
 
     
     def download_file(self):
-        if not os.path.exists(self.config.local_data_file):
-            filename, headers = request.urlretrieve(
-                url = self.config.source_URL,
-                filename = self.config.local_data_file
-            )
-            logger.info(f"{filename} download! with following info: \n{headers}")
-        else:
-            logger.info(f"File already exists of size: {get_size(Path(self.config.local_data_file))}")  
+        
+        aws_access_key_id = 'AKIASU2C6O4I6EX34RZO'
+        aws_secret_access_key = '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'
+        aws_region = 'us-east-1'
+
+        client = boto3.client('s3', aws_access_key_id=aws_access_key_id, 
+                                    aws_secret_access_key=aws_secret_access_key, 
+                                    region_name=aws_region)
+
+        bucket = 'rev.nlpdata'
+
+        cur_path = os.getcwd()
+
+        file= 'dataset.zip' 
+
+        filename = os.path.join(cur_path, 'artifacts\Data_ingestion', file)
+
+        client.download_file(
+                            Bucket = bucket,
+                            Key=file,
+                            Filename=filename
+                            )
+
+        downloads_dir = os.path.join(cur_path,'artifacts\Data_ingestion')
+
+        return downloads_dir
 
         
     
